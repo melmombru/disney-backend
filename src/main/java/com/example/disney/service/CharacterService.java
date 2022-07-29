@@ -15,6 +15,7 @@ public class CharacterService {
         this.characterRepository = characterRepository;
     }
     public DisneyCharacter loadCharacter(DisneyCharacter character) {
+        validateFields(character);
         return characterRepository.save(character);
     }
 
@@ -30,5 +31,11 @@ public class CharacterService {
     public void deleteCharacter(Long code) {
         DisneyCharacter disneyCharacter = findByCode(code);
         characterRepository.delete(disneyCharacter);
+    }
+
+    private void validateFields(DisneyCharacter character) {
+        if (character.getName().isEmpty() || character.getAge() < 0) {
+            throw new CharacterException();
+        }
     }
 }

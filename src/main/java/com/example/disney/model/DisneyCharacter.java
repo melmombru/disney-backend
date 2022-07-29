@@ -24,9 +24,6 @@ public class DisneyCharacter {
     private Long movies;
 
     public DisneyCharacter(String name, int age, int weight, String history, Long movies) {
-        if (name.isEmpty() || age < 0) {
-            throw new CharacterException();
-        }
         this.name = name;
         this.age = age;
         this.weight = weight;

@@ -8,6 +8,7 @@ import com.example.disney.model.Genre;
 import com.example.disney.model.Movie;
 import com.example.disney.service.CharacterService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,26 +17,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class DisneyApplicationTests {
-
+	@Autowired
 	CharacterService characterService;
 	//	Creation tests
 	@Test
 	public void characterCreatedSuccessfully() {
-//		List<Long> movies = new ArrayList<>();
-//		movies.add(1L);
 		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, " +
-						"Missouri. In 1925, Hugh Harman drew some sketches of mice around a photograph of Walt Disney. " +
-						"These inspired Ub Iwerks to create a new mouse character for Disney.",
-				1L);
+				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri." , 1L);
 		DisneyCharacter characterResponse = characterService.loadCharacter(character);
 
 		assertEquals("Mickey", characterResponse.getName());
 		assertEquals(91, characterResponse.getAge());
 		assertEquals(10, characterResponse.getWeight());
-		assertEquals("Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk " +
-						"at Laugh-O-Gram Studio in Kansas City, Missouri. In 1925, Hugh Harman drew some sketches of " +
-						"mice around a photograph of Walt Disney. These inspired Ub Iwerks to create a new mouse character for Disney.",
+		assertEquals("Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
 				characterResponse.getHistory());
 		assertEquals(1L, characterResponse.getMovies());
 	}
@@ -45,9 +39,7 @@ class DisneyApplicationTests {
 
 		List<DisneyCharacter> characters = new ArrayList<>();
 		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, " +
-						"Missouri. In 1925, Hugh Harman drew some sketches of mice around a photograph of Walt Disney. " +
-						"These inspired Ub Iwerks to create a new mouse character for Disney.",
+				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
 				null);
 		characters.add(character);
 		Movie movie = new Movie("Fantasia", "1940-11-13", 4, characters);
@@ -72,16 +64,15 @@ class DisneyApplicationTests {
 	//	Exceptions tests
 	@Test
 	public void characterFailedCreationWithoutNameAndNegativeAge() {
-		assertThrows(CharacterException.class, () -> new DisneyCharacter("", 91, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, " +
-						"Missouri. In 1925, Hugh Harman drew some sketches of mice around a photograph of Walt Disney. " +
-						"These inspired Ub Iwerks to create a new mouse character for Disney.",
-				null));
-		assertThrows(CharacterException.class, () -> new DisneyCharacter("Mickey", -1, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, " +
-						"Missouri. In 1925, Hugh Harman drew some sketches of mice around a photograph of Walt Disney. " +
-						"These inspired Ub Iwerks to create a new mouse character for Disney.",
-				null));
+		DisneyCharacter characterEmptyName = new DisneyCharacter("", 91, 10,
+				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
+				null);
+		assertThrows(CharacterException.class, () -> characterService.loadCharacter(characterEmptyName));
+
+		DisneyCharacter characterNegativeAge = new DisneyCharacter("Mickey", -1, 10,
+				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
+				null);
+		assertThrows(CharacterException.class, () -> characterService.loadCharacter(characterNegativeAge));
 	}
 
 	@Test
@@ -100,37 +91,32 @@ class DisneyApplicationTests {
 	@Test
 	public void characterChangedSuccessfully() {
 		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, " +
-						"Missouri. In 1925, Hugh Harman drew some sketches of mice around a photograph of Walt Disney. " +
-						"These inspired Ub Iwerks to create a new mouse character for Disney.",
+				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
 				null);
 
-		assertEquals("Mickey", character.getName());
-		assertEquals(91, character.getAge());
-		assertEquals(10, character.getWeight());
-		assertEquals("Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk " +
-						"at Laugh-O-Gram Studio in Kansas City, Missouri. In 1925, Hugh Harman drew some sketches of " +
-						"mice around a photograph of Walt Disney. These inspired Ub Iwerks to create a new mouse character for Disney.",
-				character.getHistory());
+		DisneyCharacter characterResponse = characterService.loadCharacter(character);
 
-//		List<Long> movies = new ArrayList<>();
-//		movies.add(1L);
-		character.setMovies(1L);
-		character.setAge(90);
-		character.setName("Donald Duck");
-		character.setHistory("Donald was created by Walt Disney when he heard Clarence Nash doing a peculiar" +
-				" voice while reciting \"Mary Had a Little Lamb\"." +
-				" Nash described the voice as that of a baby goat. Walt, however, insisted that it was a duck.");
-		character.setWeight(12);
+		assertEquals("Mickey", characterResponse.getName());
+		assertEquals(91, characterResponse.getAge());
+		assertEquals(10, characterResponse.getWeight());
+		assertEquals("Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
+				characterResponse.getHistory());
 
-		assertEquals("Donald Duck", character.getName());
-		assertEquals(90, character.getAge());
-		assertEquals(12, character.getWeight());
+		characterResponse.setMovies(1L);
+		characterResponse.setAge(90);
+		characterResponse.setName("Donald Duck");
+		characterResponse.setHistory("Donald was created by Walt Disney when he heard Clarence Nash doing a peculiar" +
+				" voice while reciting \"Mary Had a Little Lamb\".");
+		characterResponse.setWeight(12);
+
+		DisneyCharacter characterModifyResponse = characterService.modifyCharacter(characterResponse);
+		assertEquals("Donald Duck", characterModifyResponse.getName());
+		assertEquals(90, characterModifyResponse.getAge());
+		assertEquals(12, characterModifyResponse.getWeight());
 		assertEquals("Donald was created by Walt Disney when he heard Clarence Nash doing a peculiar" +
-						" voice while reciting \"Mary Had a Little Lamb\"." +
-						" Nash described the voice as that of a baby goat. Walt, however, insisted that it was a duck.",
-				character.getHistory());
-		assertEquals(1L, character.getMovies());
+						" voice while reciting \"Mary Had a Little Lamb\".",
+				characterModifyResponse.getHistory());
+		assertEquals(1L, characterModifyResponse.getMovies());
 	}
 
 	@Test
@@ -144,9 +130,7 @@ class DisneyApplicationTests {
 
 		List<DisneyCharacter> characters = new ArrayList<>();
 		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, " +
-						"Missouri. In 1925, Hugh Harman drew some sketches of mice around a photograph of Walt Disney. " +
-						"These inspired Ub Iwerks to create a new mouse character for Disney.",
+				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
 				null);
 		characters.add(character);
 
