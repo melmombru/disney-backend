@@ -7,6 +7,8 @@ import com.example.disney.model.DisneyCharacter;
 import com.example.disney.model.Genre;
 import com.example.disney.model.Movie;
 import com.example.disney.service.CharacterService;
+import com.example.disney.service.GenresService;
+import com.example.disney.service.MoviesService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class DisneyApplicationTests {
 	@Autowired
 	CharacterService characterService;
+	@Autowired
+	MoviesService moviesService;
+	@Autowired
+	GenresService genresService;
 	//	Creation tests
 	@Test
 	public void characterCreatedSuccessfully() {
@@ -36,29 +42,25 @@ class DisneyApplicationTests {
 
 	@Test
 	public void movieCreatedSuccessfully() {
+		Movie movie = new Movie("Fantasia", "1940-11-13", 4, 1L);
 
-		List<DisneyCharacter> characters = new ArrayList<>();
-		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
-				null);
-		characters.add(character);
-		Movie movie = new Movie("Fantasia", "1940-11-13", 4, characters);
-
-		assertEquals("Fantasia", movie.getTitle());
-		assertEquals("1940-11-13", movie.getDate().toString());
-		assertEquals(4, movie.getQualifications());
-		assertEquals("Mickey", movie.getCharacters().get(0).getName());
+		Movie movieResponse = moviesService.loadMovie(movie);
+		assertEquals("Fantasia", movieResponse.getTitle());
+		assertEquals("1940-11-13", movieResponse.getDate().toString());
+		assertEquals(4, movieResponse.getQualifications());
 	}
 
 	@Test
 	public void genreCreatedSuccessfully() {
-		List<Movie> movies = new ArrayList<>();
-		Movie movie = new Movie("Fantasia", "1940-11-13", 4, null);
-		movies.add(movie);
-		Genre genre = new Genre("Comedy", movies);
+//		List<Movie> movies = new ArrayList<>();
+//		Movie movie = new Movie("Fantasia", "1940-11-13", 4, null);
+//		movies.add(movie);
+		Genre genre = new Genre("Comedy", 1L);
 
-		assertEquals("Comedy", genre.getName());
-		assertEquals("Fantasia", genre.getMovies().get(0).getTitle());
+		Genre genreResponse = genresService.loadGenre(genre);
+
+		assertEquals("Comedy", genreResponse.getName());
+		assertEquals(1L, genreResponse.getMovies());
 	}
 
 	//	Exceptions tests
@@ -77,14 +79,20 @@ class DisneyApplicationTests {
 
 	@Test
 	public void movieFailedCreationWithoutTitleAndWrongQualification() {
-		assertThrows(MovieException.class, () -> new Movie("", "1940-11-13", 4, null));
-		assertThrows(MovieException.class, () -> new Movie("Fantasia", "1940-11-13", -4, null));
-		assertThrows(MovieException.class, () -> new Movie("Fantasia", "1940-11-13", 14, null));
+		Movie movieEmptyName = new Movie("", "1940-11-13", 4, null);
+		assertThrows(MovieException.class, () -> moviesService.loadMovie(movieEmptyName));
+
+		Movie movieNegativeQualification = new Movie("Fantasia", "1940-11-13", -4, null);
+		assertThrows(MovieException.class, () -> moviesService.loadMovie(movieNegativeQualification));
+
+		Movie movieOverQualification = new Movie("Fantasia", "1940-11-13", 14, null);
+		assertThrows(MovieException.class, () -> moviesService.loadMovie(movieOverQualification));
 	}
 
 	@Test
 	public void genreFailedCreationWithoutName() {
-		assertThrows(GenreException.class, () -> new Genre("", null));
+		Genre genreEmptyName = new Genre("", null);
+		assertThrows(GenreException.class, () -> genresService.loadGenre(genreEmptyName));
 	}
 
 	//	Edition tests
@@ -124,41 +132,39 @@ class DisneyApplicationTests {
 
 		Movie movie = new Movie("Fantasia", "1940-11-13", 4, null);
 
-		assertEquals("Fantasia", movie.getTitle());
-		assertEquals("1940-11-13", movie.getDate().toString());
-		assertEquals(4, movie.getQualifications());
+		Movie movieResponse = moviesService.loadMovie(movie);
 
-		List<DisneyCharacter> characters = new ArrayList<>();
-		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
-				null);
-		characters.add(character);
+		assertEquals("Fantasia", movieResponse.getTitle());
+		assertEquals("1940-11-13", movieResponse.getDate().toString());
+		assertEquals(4, movieResponse.getQualifications());
 
-		movie.setCharacters(characters);
-		movie.setDate("1999-12-17");
-		movie.setTitle("Fantasia 2000");
-		movie.setQualification(5);
+		movieResponse.setCharacters(1L);
+		movieResponse.setDate("1999-12-17");
+		movieResponse.setTitle("Fantasia 2000");
+		movieResponse.setQualification(5);
 
-		assertEquals("Fantasia 2000", movie.getTitle());
-		assertEquals("1999-12-17", movie.getDate().toString());
-		assertEquals(5, movie.getQualifications());
-		assertEquals("Mickey", movie.getCharacters().get(0).getName());
+		Movie movieModify = moviesService.modifyMovie(movieResponse);
+
+		assertEquals("Fantasia 2000", movieModify.getTitle());
+		assertEquals("1999-12-17", movieModify.getDate().toString());
+		assertEquals(5, movieModify.getQualifications());
+		assertEquals(1L, movieModify.getCharacters());
 	}
 
 	@Test
 	public void genreChangedSuccessfully() {
 		Genre genre = new Genre("Comedy", null);
 
-		assertEquals("Comedy", genre.getName());
+		Genre genreResponse = genresService.loadGenre(genre);
 
-		List<Movie> movies = new ArrayList<>();
-		Movie movie = new Movie("Fantasia", "1940-11-13", 4, null);
-		movies.add(movie);
+		assertEquals("Comedy", genreResponse.getName());
 
-		genre.setName("Musical");
-		genre.setMovies(movies);
+		genreResponse.setName("Musical");
+		genreResponse.setMovies(1L);
 
-		assertEquals("Musical", genre.getName());
-		assertEquals("Fantasia", genre.getMovies().get(0).getTitle());
+		Genre genreModify = genresService.modifyGenre(genreResponse);
+
+		assertEquals("Musical", genreModify.getName());
+		assertEquals(1L, genreModify.getMovies());
 	}
 }

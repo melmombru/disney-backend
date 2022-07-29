@@ -1,20 +1,29 @@
 package com.example.disney.model;
 
 import com.example.disney.exception.MovieException;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.List;
 
+@Entity
+@Data
+@NoArgsConstructor
 public class Movie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long code;
     private String title;
     private LocalDate date;
     private int qualification;
-    private List<DisneyCharacter> characters;
+    private Long characters;
 
-    public Movie(String title, String date, int qualification, List<DisneyCharacter> characters) {
-        if (title.isEmpty() || qualification <= 0 || qualification > 5) {
-            throw new MovieException();
-        }
+    public Movie(String title, String date, int qualification, Long characters) {
         this.title = title;
         this.date = LocalDate.parse(date);
         this.qualification = qualification;
@@ -33,11 +42,11 @@ public class Movie {
         return this.qualification;
     }
 
-    public List<DisneyCharacter> getCharacters() {
+    public Long getCharacters() {
         return this.characters;
     }
 
-    public void setCharacters(List<DisneyCharacter> characters) {
+    public void setCharacters(Long characters) {
         this.characters = characters;
     }
 
@@ -51,5 +60,9 @@ public class Movie {
 
     public void setQualification(int qualification) {
         this.qualification = qualification;
+    }
+
+    public Long getCode() {
+        return this.code;
     }
 }

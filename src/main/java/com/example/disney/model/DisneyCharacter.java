@@ -1,9 +1,6 @@
 package com.example.disney.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import com.example.disney.exception.CharacterException;
 import lombok.Data;
@@ -21,6 +18,7 @@ public class DisneyCharacter {
     private int age;
     private int weight;
     private String history;
+//    @OneToMany(cascade = {CascadeType.DETACH})
     private Long movies;
 
     public DisneyCharacter(String name, int age, int weight, String history, Long movies) {

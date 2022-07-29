@@ -14,6 +14,7 @@ public class CharacterService {
     public CharacterService(CharacterRepository characterRepository) {
         this.characterRepository = characterRepository;
     }
+
     public DisneyCharacter loadCharacter(DisneyCharacter character) {
         validateFields(character);
         return characterRepository.save(character);
