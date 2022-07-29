@@ -100,7 +100,7 @@ class DisneyApplicationTests {
 	public void characterChangedSuccessfully() {
 		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
 				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
-				null);
+				1L);
 
 		DisneyCharacter characterResponse = characterService.loadCharacter(character);
 
@@ -109,8 +109,8 @@ class DisneyApplicationTests {
 		assertEquals(10, characterResponse.getWeight());
 		assertEquals("Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
 				characterResponse.getHistory());
+		assertEquals(1L, characterResponse.getMovies());
 
-		characterResponse.setMovies(1L);
 		characterResponse.setAge(90);
 		characterResponse.setName("Donald Duck");
 		characterResponse.setHistory("Donald was created by Walt Disney when he heard Clarence Nash doing a peculiar" +

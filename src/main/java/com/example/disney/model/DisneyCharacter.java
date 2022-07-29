@@ -49,10 +49,6 @@ public class DisneyCharacter {
         return this.movies;
     }
 
-    public void setMovies(Long movies) {
-        this.movies = movies;
-    }
-
     public void setAge(int age) {
         this.age = age;
     }
