@@ -63,7 +63,7 @@ public class MoviesService {
     public List<Movie> findMovieByGenre(Long code) {
         return null;
     }
-    
+
     public List<Movie> findMovieByASCOrder() {
         List<Movie> movies = moviesRepository.findAll();
         ascSort(movies);
