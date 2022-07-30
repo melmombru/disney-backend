@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface GenresRepository extends JpaRepository<Genre, Long> {
 
-    @Query("FROM Genre g WHERE g.code = :code")
-    Optional<Genre> findByCode(Long code);
+//    @Query("FROM Genre g WHERE g.code = :code")
+//    Optional<Genre> findByCode(Long code);
 }

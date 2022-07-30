@@ -13,8 +13,8 @@ public class CharacterService {
     @Autowired
     private CharacterRepository characterRepository;
 
-    public CharacterService(CharacterRepository characterRepository) {
-        this.characterRepository = characterRepository;
+    public CharacterService() {
+
     }
 
     public DisneyCharacter loadCharacter(DisneyCharacter character) {
@@ -52,10 +52,10 @@ public class CharacterService {
         return characters;
     }
 
-    public List<DisneyCharacter> findCharacterByMovie(Long code_movie) {
-        List<DisneyCharacter> characters = characterRepository.getCharacterMovie(code_movie);
-        return characters;
-    }
+//    public List<DisneyCharacter> findCharacterByMovie(Long code_movie) {
+//        List<DisneyCharacter> characters = characterRepository.getCharacterMovie(code_movie);
+//        return characters;
+//    }
 
     public List<DisneyCharacter> getCharacters() {
         return characterRepository.findAll();

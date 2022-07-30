@@ -12,8 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface CharacterRepository extends JpaRepository<DisneyCharacter, Long> {
-    @Query("FROM DisneyCharacter d WHERE d.code_character = :code_character")
-    Optional<DisneyCharacter> findByCode(Long code_character);
+//    @Query("FROM DisneyCharacter d WHERE d.code_character = :code_character")
+//    Optional<DisneyCharacter> findByCode(Long code_character);
 
     @Query("FROM DisneyCharacter d WHERE d.name = :name")
     List<DisneyCharacter> getCharacterName(String name);
@@ -21,6 +21,6 @@ public interface CharacterRepository extends JpaRepository<DisneyCharacter, Long
     @Query("FROM DisneyCharacter d WHERE d.age = :age")
     List<DisneyCharacter> getCharacterAge(Integer age);
 
-    @Query("FROM DisneyCharacter d WHERE d.movies.code_movie = :code_movie")
-    List<DisneyCharacter> getCharacterMovie(Long code_movie);
+//    @Query("FROM DisneyCharacter d WHERE d.movies = :code_movie")
+//    List<DisneyCharacter> getCharacterMovie(Long code_movie);
 }

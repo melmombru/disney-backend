@@ -20,8 +20,8 @@ public class MoviesService {
     @Autowired
     MoviesRepository moviesRepository;
 
-    public MoviesService(MoviesRepository moviesRepository) {
-        this.moviesRepository = moviesRepository;
+    public MoviesService() {
+
     }
 
     public Movie loadMovie(Movie movie) {

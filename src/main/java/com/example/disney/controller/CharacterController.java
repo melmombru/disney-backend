@@ -3,6 +3,7 @@ package com.example.disney.controller;
 import com.example.disney.model.DisneyCharacter;
 import com.example.disney.model.Genre;
 import com.example.disney.service.CharacterService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,14 @@ import java.util.List;
 @RequestMapping("/characters")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CharacterController {
+    @Autowired
     private CharacterService characterService;
 
-    public CharacterController(CharacterService characterService) {
-        this.characterService = characterService;
+//    public CharacterController(CharacterService characterService) {
+//        this.characterService = characterService;
+//    }
+
+    public CharacterController() {
     }
 
     @PostMapping("/load")
@@ -50,8 +55,8 @@ public class CharacterController {
         return new ResponseEntity<>(characterService.findCharacterByAge(age), HttpStatus.OK);
     }
 
-    @GetMapping("/find/{idMovie}")
-    public ResponseEntity<List<DisneyCharacter>> findByMovie(@RequestParam Integer code_movie) {
-        return new ResponseEntity<>(characterService.findCharacterByMovie(Long.valueOf(code_movie)), HttpStatus.OK);
-    }
+//    @GetMapping("/find/{idMovie}")
+//    public ResponseEntity<List<DisneyCharacter>> findByMovie(@RequestParam Integer code_movie) {
+//        return new ResponseEntity<>(characterService.findCharacterByMovie(Long.valueOf(code_movie)), HttpStatus.OK);
+//    }
 }

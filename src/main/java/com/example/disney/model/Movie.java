@@ -20,6 +20,9 @@ public class Movie {
     private int qualification;
     @ManyToMany(mappedBy = "movies")
     private List<DisneyCharacter> characters;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "genre_id", nullable = false)
+    private Genre genre;
 
     public Movie(String title, String date, int qualification, DisneyCharacter characters) {
         this.title = title;
@@ -28,6 +31,12 @@ public class Movie {
         if (characters != null) {
             this.characters.add(characters);
         }
+    }
+
+    public Movie(String title, String date, int qualification) {
+        this.title = title;
+        this.date = LocalDate.parse(date);
+        this.qualification = qualification;
     }
 
     public String getTitle() {

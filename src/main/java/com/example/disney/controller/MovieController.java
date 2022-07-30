@@ -5,6 +5,7 @@ import com.example.disney.model.Genre;
 import com.example.disney.model.Movie;
 import com.example.disney.service.CharacterService;
 import com.example.disney.service.MoviesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,10 @@ import java.util.List;
 @RequestMapping("/movies")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MovieController {
+    @Autowired
     private MoviesService moviesService;
 
-    public MovieController(MoviesService moviesService) {
-        this.moviesService = moviesService;
+    public MovieController() {
     }
 
     @PostMapping("/load")

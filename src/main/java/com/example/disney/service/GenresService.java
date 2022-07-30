@@ -16,8 +16,8 @@ public class GenresService {
     @Autowired
     GenresRepository genresRepository;
 
-    public GenresService(GenresRepository genresRepository) {
-        this.genresRepository = genresRepository;
+    public GenresService() {
+
     }
 
     public Genre loadGenre(Genre genre) {
@@ -31,7 +31,7 @@ public class GenresService {
     }
 
     public Genre findByCode(Long code) {
-        return genresRepository.findByCode(code).orElseThrow(() ->
+        return genresRepository.findById(code).orElseThrow(() ->
                 new GenreException());
     }
 

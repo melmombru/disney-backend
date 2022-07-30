@@ -11,8 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface MoviesRepository extends JpaRepository<Movie, Long> {
-    @Query("FROM Movie m WHERE m.code_movie = :code_movie")
-    Optional<Movie> findByCode(Long code_movie);
+//    @Query("FROM Movie m WHERE m.code_movie = :code_movie")
+//    Optional<Movie> findByCode(Long code_movie);
 
     @Query("FROM Movie m WHERE m.title = :title")
     List<Movie> getMovieName(String title);
