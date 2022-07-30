@@ -28,8 +28,12 @@ class DisneyApplicationTests {
 	//	Creation tests
 	@Test
 	public void characterCreatedSuccessfully() {
+		List<Movie> movies = new ArrayList<>();
+		Movie movie = new Movie("Fantasia", "1940-11-13", 4, null);
+		movies.add(movie);
+		moviesService.loadMovie(movie);
 		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri." , 1L);
+				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri." , movie);
 		DisneyCharacter characterResponse = characterService.loadCharacter(character);
 
 		assertEquals("Mickey", characterResponse.getName());
@@ -37,12 +41,12 @@ class DisneyApplicationTests {
 		assertEquals(10, characterResponse.getWeight());
 		assertEquals("Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
 				characterResponse.getHistory());
-		assertEquals(1L, characterResponse.getMovies());
+		assertEquals(movie.getTitle(), characterResponse.getMovies().get(0).getTitle());
 	}
 
 	@Test
 	public void movieCreatedSuccessfully() {
-		Movie movie = new Movie("Fantasia", "1940-11-13", 4, 1L);
+		Movie movie = new Movie("Fantasia", "1940-11-13", 4, null);
 
 		Movie movieResponse = moviesService.loadMovie(movie);
 		assertEquals("Fantasia", movieResponse.getTitle());
@@ -52,9 +56,6 @@ class DisneyApplicationTests {
 
 	@Test
 	public void genreCreatedSuccessfully() {
-//		List<Movie> movies = new ArrayList<>();
-//		Movie movie = new Movie("Fantasia", "1940-11-13", 4, null);
-//		movies.add(movie);
 		Genre genre = new Genre("Comedy", 1L);
 
 		Genre genreResponse = genresService.loadGenre(genre);
@@ -98,9 +99,11 @@ class DisneyApplicationTests {
 	//	Edition tests
 	@Test
 	public void characterChangedSuccessfully() {
+		Movie movie = new Movie("Fantasia", "1940-11-13", 4, null);
+		moviesService.loadMovie(movie);
 		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
 				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
-				1L);
+				movie);
 
 		DisneyCharacter characterResponse = characterService.loadCharacter(character);
 
@@ -109,7 +112,7 @@ class DisneyApplicationTests {
 		assertEquals(10, characterResponse.getWeight());
 		assertEquals("Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
 				characterResponse.getHistory());
-		assertEquals(1L, characterResponse.getMovies());
+		assertEquals(movie.getTitle(), characterResponse.getMovies().get(0).getTitle());
 
 		characterResponse.setAge(90);
 		characterResponse.setName("Donald Duck");
@@ -124,7 +127,7 @@ class DisneyApplicationTests {
 		assertEquals("Donald was created by Walt Disney when he heard Clarence Nash doing a peculiar" +
 						" voice while reciting \"Mary Had a Little Lamb\".",
 				characterModifyResponse.getHistory());
-		assertEquals(1L, characterModifyResponse.getMovies());
+		assertEquals(movie.getTitle(), characterModifyResponse.getMovies().get(0).getTitle());
 	}
 
 	@Test
@@ -138,7 +141,12 @@ class DisneyApplicationTests {
 		assertEquals("1940-11-13", movieResponse.getDate().toString());
 		assertEquals(4, movieResponse.getQualifications());
 
-		movieResponse.setCharacters(1L);
+		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
+				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
+				movie);
+//		characterService.loadCharacter(character);
+
+//		movieResponse.setCharacters(character);
 		movieResponse.setDate("1999-12-17");
 		movieResponse.setTitle("Fantasia 2000");
 		movieResponse.setQualification(5);
@@ -148,7 +156,7 @@ class DisneyApplicationTests {
 		assertEquals("Fantasia 2000", movieModify.getTitle());
 		assertEquals("1999-12-17", movieModify.getDate().toString());
 		assertEquals(5, movieModify.getQualifications());
-		assertEquals(1L, movieModify.getCharacters());
+//		assertEquals(character.getName(), movieModify.getCharacters().get(0).getName());
 	}
 
 	@Test

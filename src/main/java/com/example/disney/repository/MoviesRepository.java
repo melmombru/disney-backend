@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface MoviesRepository extends JpaRepository<Movie, Long> {
-    @Query("FROM Movie m WHERE m.code = :code")
+    @Query("FROM Movie m WHERE m.code_movie = :code_movie")
     Optional<Movie> findByCode(Long code);
 }

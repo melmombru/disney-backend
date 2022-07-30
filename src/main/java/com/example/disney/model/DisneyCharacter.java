@@ -6,6 +6,7 @@ import com.example.disney.exception.CharacterException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Data
@@ -13,20 +14,26 @@ import java.util.List;
 public class DisneyCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long code;
+    Long code_character;
     private String name;
     private int age;
     private int weight;
     private String history;
-//    @OneToMany(cascade = {CascadeType.DETACH})
-    private Long movies;
+    @ManyToMany
+    @JoinTable(
+            name = "in_movies",
+            joinColumns = @JoinColumn(name = "code_character"),
+            inverseJoinColumns = @JoinColumn(name = "code_movie"))
+    private List<Movie> movies = new ArrayList<Movie>();
 
-    public DisneyCharacter(String name, int age, int weight, String history, Long movies) {
+    public DisneyCharacter(String name, int age, int weight, String history, Movie movies) {
         this.name = name;
         this.age = age;
         this.weight = weight;
         this.history = history;
-        this.movies = movies;
+        if (movies != null) {
+            this.movies.add(movies);
+        }
     }
 
     public String getName() {
@@ -45,7 +52,7 @@ public class DisneyCharacter {
         return this.history;
     }
 
-    public Long getMovies() {
+    public List<Movie> getMovies() {
         return this.movies;
     }
 
@@ -63,5 +70,9 @@ public class DisneyCharacter {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public Long getCode() {
+        return this.code_character;
     }
 }

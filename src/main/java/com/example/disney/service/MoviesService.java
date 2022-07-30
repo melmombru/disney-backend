@@ -9,6 +9,8 @@ import com.example.disney.repository.MoviesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class MoviesService {
     @Autowired
@@ -28,8 +30,9 @@ public class MoviesService {
         return moviesRepository.save(movie);
     }
 
+    @Transactional
     public Movie findByCode(Long code) {
-        return moviesRepository.findByCode(code).orElseThrow(() ->
+        return moviesRepository.findById(code).orElseThrow(() ->
                 new MovieException());
     }
 

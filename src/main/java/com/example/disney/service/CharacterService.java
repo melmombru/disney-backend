@@ -26,7 +26,7 @@ public class CharacterService {
     }
 
     public DisneyCharacter findByCode(Long code) {
-        return characterRepository.findByCode(code).orElseThrow(() ->
+        return characterRepository.findById(code).orElseThrow(() ->
                 new CharacterException());
     }
     public void deleteCharacter(Long code) {

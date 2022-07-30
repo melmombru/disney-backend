@@ -4,10 +4,7 @@ import com.example.disney.exception.MovieException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,17 +14,20 @@ import java.util.List;
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long code;
+    private Long code_movie;
     private String title;
     private LocalDate date;
     private int qualification;
-    private Long characters;
+    @ManyToMany(mappedBy = "movies")
+    private List<DisneyCharacter> characters;
 
-    public Movie(String title, String date, int qualification, Long characters) {
+    public Movie(String title, String date, int qualification, DisneyCharacter characters) {
         this.title = title;
         this.date = LocalDate.parse(date);
         this.qualification = qualification;
-        this.characters = characters;
+        if (characters != null) {
+            this.characters.add(characters);
+        }
     }
 
     public String getTitle() {
@@ -42,12 +42,14 @@ public class Movie {
         return this.qualification;
     }
 
-    public Long getCharacters() {
+    public List<DisneyCharacter> getCharacters() {
         return this.characters;
     }
 
-    public void setCharacters(Long characters) {
-        this.characters = characters;
+    public void setCharacters(DisneyCharacter characters) {
+        if (characters != null) {
+            this.characters.add(characters);
+        }
     }
 
     public void setDate(String date) {
@@ -63,6 +65,6 @@ public class Movie {
     }
 
     public Long getCode() {
-        return this.code;
+        return this.code_movie;
     }
 }

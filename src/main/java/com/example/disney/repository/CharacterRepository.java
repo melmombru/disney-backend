@@ -12,6 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface CharacterRepository extends JpaRepository<DisneyCharacter, Long> {
-    @Query("FROM DisneyCharacter d WHERE d.code = :code")
+    @Query("FROM DisneyCharacter d WHERE d.code_character = :code_character")
     Optional<DisneyCharacter> findByCode(Long code);
 }
