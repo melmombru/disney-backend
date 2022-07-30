@@ -132,7 +132,6 @@ class DisneyApplicationTests {
 
 	@Test
 	public void movieChangedSuccessfully() {
-
 		Movie movie = new Movie("Fantasia", "1940-11-13", 4, null);
 
 		Movie movieResponse = moviesService.loadMovie(movie);
@@ -141,12 +140,6 @@ class DisneyApplicationTests {
 		assertEquals("1940-11-13", movieResponse.getDate().toString());
 		assertEquals(4, movieResponse.getQualifications());
 
-		DisneyCharacter character = new DisneyCharacter("Mickey", 91, 10,
-				"Walt Disney got the inspiration for Mickey Mouse from a tame mouse at his desk at Laugh-O-Gram Studio in Kansas City, Missouri.",
-				movie);
-//		characterService.loadCharacter(character);
-
-//		movieResponse.setCharacters(character);
 		movieResponse.setDate("1999-12-17");
 		movieResponse.setTitle("Fantasia 2000");
 		movieResponse.setQualification(5);
@@ -156,7 +149,6 @@ class DisneyApplicationTests {
 		assertEquals("Fantasia 2000", movieModify.getTitle());
 		assertEquals("1999-12-17", movieModify.getDate().toString());
 		assertEquals(5, movieModify.getQualifications());
-//		assertEquals(character.getName(), movieModify.getCharacters().get(0).getName());
 	}
 
 	@Test

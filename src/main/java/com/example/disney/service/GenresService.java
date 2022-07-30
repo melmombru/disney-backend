@@ -9,6 +9,8 @@ import com.example.disney.repository.MoviesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GenresService {
     @Autowired
@@ -37,5 +39,9 @@ public class GenresService {
         if (genre.getName().isEmpty()){
             throw new GenreException();
         }
+    }
+
+    public List<Genre> getGenres() {
+        return genresRepository.findAll();
     }
 }

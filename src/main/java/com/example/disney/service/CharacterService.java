@@ -6,6 +6,8 @@ import com.example.disney.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CharacterService {
     @Autowired
@@ -38,5 +40,24 @@ public class CharacterService {
         if (character.getName().isEmpty() || character.getAge() < 0) {
             throw new CharacterException();
         }
+    }
+
+    public List<DisneyCharacter> findCharacterByName(String name) {
+        List<DisneyCharacter> characters = characterRepository.getCharacterName(name);
+        return characters;
+    }
+
+    public List<DisneyCharacter> findCharacterByAge(Integer age) {
+        List<DisneyCharacter> characters = characterRepository.getCharacterAge(age);
+        return characters;
+    }
+
+    public List<DisneyCharacter> findCharacterByMovie(Long code_movie) {
+        List<DisneyCharacter> characters = characterRepository.getCharacterMovie(code_movie);
+        return characters;
+    }
+
+    public List<DisneyCharacter> getCharacters() {
+        return characterRepository.findAll();
     }
 }
